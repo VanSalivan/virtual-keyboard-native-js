@@ -1,22 +1,22 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-.keyboard{
+.keyboard {
     width: 100%;
     position: fixed;
     left: 0;
     bottom: 0;
     background-color: #004134;
     padding: 5px 0;
-    box-shadow:0 0 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
     user-select: none;
     transition: bottom 0.4s;
 }
 
-.keyboard--hidden{
+.keyboard--hidden {
     bottom: -100%;
 }
 
@@ -24,18 +24,19 @@
     text-align: center;
 }
 
-.keyboard__key{
+.keyboard__key {
     height: 45px;
     width: 6%;
-    max-width: 90px;
+    max-width: 70px;
+    margin: 2px;
     border-radius: 4px;
     border: none;
-    background-color: rgba(255, 255, 255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     color: #ffffff;
     font-size: 1.05rem;
     outline: none;
     cursor: pointer;
-    display:inline-flex;
+    display: inline-flex;
     align-items: flex-end;
     justify-content: center;
     vertical-align: top;
@@ -44,7 +45,7 @@
 }
 
 .keyboard__key:active {
-    background-color: rgba(255, 255, 255,0.12);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
 .keyboard__key--wide {
@@ -56,10 +57,10 @@
     max-width: 500px;
 }
 
-.keyboard__key--active{
-    background-color:rgb(231, 218, 35);
+.keyboard__key--active {
+    background-color: rgb(231, 218, 35);
 }
 
-.keyboard__key--dark{
+.keyboard__key--dark {
     background-color: rgba(0, 0, 0, 0.25);
 }
