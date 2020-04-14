@@ -13,8 +13,12 @@ const Keyboard = {
     properties: {
         value: "",
         capsLock: false,
-        language: false
+        language: false,
+        alt: false,
+        shift: false,
     },
+
+
 
     // language: {
     //     ru: [
@@ -37,35 +41,23 @@ const Keyboard = {
         this.addToDOMKeyboard();
         // СОЗДАЕМ textarea ЭЛЕМЕНТ
         this.elements.textarea = document.createElement("textarea");
-       
+
         // ADD CLASSES
         this.elements.textarea.classList.add("use-keyboard");
         this.elements.main.classList.add("keyboard--hidden");
-    
+
         //ADD to DOM
         document.body.appendChild(this.elements.textarea);
 
-        this.elements.textarea.addEventListener('keydown', (event) => {
-            console.log(event);
-            
-        });
-        
 
-        // Automatically use keyboard for elements with .use-keyboard-input
-        document.querySelectorAll(".use-keyboard").forEach(element => {
-            element.addEventListener("focus", () => {
-                this.open(element.value, currentValue => {
-                    element.value = currentValue;
-                });
-            });
-        });
+
     },
 
     addToDOMKeyboard() {
         // СОЗДАЕМ ГЛАВНЫЕ ЭЛЕМЕНТЫ
         this.elements.main = document.createElement("div");
         this.elements.keysContainer = document.createElement("div");
-        
+
         // ADD CLASSES
         this.elements.main.classList.add("keyboard");
         this.elements.main.id = "keyboard";
@@ -73,9 +65,9 @@ const Keyboard = {
         this.elements.keysContainer.appendChild(this._createKeys());
         this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__key");
 
-         //ADD to DOM
-         this.elements.main.appendChild(this.elements.keysContainer);
-         document.body.appendChild(this.elements.main);
+        //ADD to DOM
+        this.elements.main.appendChild(this.elements.keysContainer);
+        document.body.appendChild(this.elements.main);
     },
 
     _createKeys() {
@@ -87,11 +79,11 @@ const Keyboard = {
             "Shift", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "↑", "SHIFT",
             "CTRL", "Win", "ALT", "Space", "ALT", "CTRL", "←", "↓", "→"
         ] : [
-            '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
-            'TAB', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'DEL',
-            'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'ENTER',
-            'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'SHIFT',
-            'CTRL', 'Win', 'ALT', 'Space', 'ALT', 'CTRL', '←', '↓', '→'
+                '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
+                'TAB', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'DEL',
+                'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'ENTER',
+                'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'SHIFT',
+                'CTRL', 'Win', 'ALT', 'Space', 'ALT', 'CTRL', '←', '↓', '→'
             ];
 
         const codes = [
@@ -100,7 +92,7 @@ const Keyboard = {
             'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter',
             'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight',
             'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'End',
-          ];
+        ];
 
         // Creates HTML for an icon
         const createIconHTML = (icon_name) => {
@@ -176,7 +168,7 @@ const Keyboard = {
                     keyElement.innerHTML = createIconHTML("sync_alt");
 
                     keyElement.addEventListener("click", () => {
-                        this.properties.value +=  "\t";
+                        this.properties.value += "\t";
                         this._triggerEvent("oninput");
                     });
 
@@ -185,6 +177,13 @@ const Keyboard = {
                 case "DEL":
                     keyElement.classList.add("keyboard__key--wide");
                     keyElement.innerHTML = createIconHTML("delete");
+
+                    // keyElement.addEventListener("click", () => {
+                    //     // this.properties.value = this.properties.value.substring(0, this.properties.value.length - focus())
+
+
+                    //     this._triggerEvent("oninput");
+                    // });
 
                     break;
 
@@ -197,10 +196,8 @@ const Keyboard = {
                 case "Win":
                     keyElement.classList.add("keyboard__key--wide");
                     keyElement.innerHTML = createIconHTML("view_headline");
-                    
+
                     keyElement.addEventListener("click", () => {
-                        // console.log(this.properties.language)
-                        // this.properties.language = this.properties.language === false ? true : false ;
                         this._toggleLanguage();
                     });
 
@@ -211,15 +208,16 @@ const Keyboard = {
                     keyElement.innerText = "CTRL";
 
                     break;
-                
+
                 default:
                     keyElement.textContent = key.toLowerCase();
-
                     keyElement.addEventListener("click", (event) => {
                         this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                         this._triggerEvent("oninput");
-                        console.log(event.target)
+                        // console.log(event.target.textContent)
                     });
+
+
 
                     break;
             }
@@ -242,7 +240,7 @@ const Keyboard = {
 
     _toggleCapsLock() {
         this.properties.capsLock = !this.properties.capsLock;
-        
+
         for (const key of this.elements.keys) {
             // console.log(key)
             if (key.textContent.length === 1) {
@@ -261,10 +259,7 @@ const Keyboard = {
         this.elements.keys = null;
 
         this.addToDOMKeyboard();
-
-        // console.log(this.elements.keys)
-        
-},
+    },
 
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || "";
@@ -278,9 +273,40 @@ const Keyboard = {
         this.eventHandlers.oninput = oninput;
         this.eventHandlers.onclose = onclose;
         this.elements.main.classList.add("keyboard--hidden");
+    },
+
+
+    addEvents() {
+        // Automatically use keyboard for elements with .use-keyboard-input
+        document.querySelectorAll(".use-keyboard").forEach(element => {
+            element.addEventListener("focus", () => {
+                this.open(element.value, currentValue => {
+                    element.value = currentValue;
+                });
+            });
+        });
+
+        document.addEventListener('keydown', (event) => {
+            document.querySelector('.use-keyboard').focus();
+
+            document.querySelectorAll('.keyboard__key').forEach((button) => {
+                console.log(event.key)
+                button.classList.add("action--key")
+            })
+
+        });
+
+        document.addEventListener('keyup', (event) => {
+            document.querySelector('.use-keyboard').focus();
+
+            document.querySelectorAll('.keyboard__key').forEach((button) => {
+                button.classList.remove("action--key")
+            })
+        });
     }
 };
 
 window.addEventListener("DOMContentLoaded", function () {
     Keyboard.init();
+    Keyboard.addEvents();
 });
