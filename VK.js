@@ -18,8 +18,6 @@ const Keyboard = {
         shift: false,
     },
 
-
-
     // language: {
     //     ru: [
     //         "ё", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace",
@@ -49,8 +47,6 @@ const Keyboard = {
         //ADD to DOM
         document.body.appendChild(this.elements.textarea);
 
-
-
     },
 
     addToDOMKeyboard() {
@@ -76,7 +72,7 @@ const Keyboard = {
             "ё", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace",
             "TAB", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "DEL",
             "CapsLock", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "ENTER",
-            "Shift", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "↑", 
+            "Shift", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "↑",
             "CTRL", "Win", "Alt", "Space", "←", "↓", "→"
         ] : [
                 '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
@@ -102,6 +98,7 @@ const Keyboard = {
         keyLayout.forEach(key => {
             const keyElement = document.createElement("button");
             const insertLineBreak = ["Backspace", "DEL", "ENTER", "↑", "→"].indexOf(key) !== -1;
+
 
             // Add attributes/classes
             keyElement.setAttribute("type", "button");
@@ -178,13 +175,6 @@ const Keyboard = {
                     keyElement.classList.add("keyboard__key--wide");
                     keyElement.innerHTML = "Delete";
 
-                    // keyElement.addEventListener("click", () => {
-                    //     // this.properties.value = this.properties.value.substring(0, this.properties.value.length - focus())
-
-
-                    //     this._triggerEvent("oninput");
-                    // });
-
                     break;
 
                 case "Shift":
@@ -196,10 +186,6 @@ const Keyboard = {
                 case "Win":
                     keyElement.classList.add("keyboard__key--wide");
                     keyElement.innerHTML = "Meta";
-
-                    keyElement.addEventListener("click", () => {
-                        this._toggleLanguage();
-                    });
 
                     break;
 
@@ -214,10 +200,7 @@ const Keyboard = {
                     keyElement.addEventListener("click", (event) => {
                         this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                         this._triggerEvent("oninput");
-                        // console.log(event.target.textContent)
                     });
-
-
 
                     break;
             }
@@ -259,7 +242,30 @@ const Keyboard = {
         this.elements.keys = null;
 
         this.addToDOMKeyboard();
-        this.addEvents()
+        this.addEvents();
+    },
+
+
+    _togglePress() {
+        let keysArray = Keyboard.elements.keys;
+        // Подсветка Клавишь Ивента
+        document.addEventListener('keydown', (event) => {
+            document.querySelector('.use-keyboard').focus();
+            // console.log(event)
+            keysArray.forEach((button) => {
+                if (button.textContent === event.key) {
+                    button.classList.add("keyboard-key-pressed")
+                }
+            })
+        });
+
+        // Снятие Подсветки Клавишь Ивента
+        document.addEventListener('keyup', (event) => {
+            document.querySelector('.use-keyboard').focus();
+            keysArray.forEach((button) => {
+                button.classList.remove("keyboard-key-pressed")
+            })
+        });
     },
 
     open(initialValue, oninput, onclose) {
@@ -278,8 +284,7 @@ const Keyboard = {
 
 
     addEvents() {
-        let keysArray = Keyboard.elements.keys;
-
+        this._togglePress();
         // Automatically use keyboard for elements with .use-keyboard-input
         document.querySelectorAll(".use-keyboard").forEach(element => {
             element.addEventListener("focus", () => {
@@ -289,22 +294,26 @@ const Keyboard = {
             });
         });
 
-        document.addEventListener('keydown', (event) => {
-            document.querySelector('.use-keyboard').focus();
-            console.log(event)
-            keysArray.forEach((button) => {
-                if (button.textContent === event.key) {
-                    button.classList.add("keyboard-key-pressed")
-                }
-            })
-        });
+        //Смена языка на shift + alt
+        function runOnKeys(func, ...codes) {
+            let pressed = new Set();
 
-        document.addEventListener('keyup', (event) => {
-            document.querySelector('.use-keyboard').focus();
-            keysArray.forEach((button) => {
-                button.classList.remove("keyboard-key-pressed")
-            })
-        });
+            document.addEventListener('keydown', function (event) {
+                pressed.add(event.code);
+
+                for (let code of codes) {
+                    if (!pressed.has(code)) return;
+                }
+                pressed.clear();
+                func();
+            });
+
+            document.addEventListener('keyup', function (event) {
+                pressed.delete(event.code);
+            });
+        }
+
+        runOnKeys(() => this._toggleLanguage(), 'ShiftLeft', 'AltLeft');
     }
 };
 
