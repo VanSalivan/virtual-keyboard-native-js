@@ -315,13 +315,13 @@ export default [
     code: 'ArrowDown',
   },
   {
-    small: '&rarr;',
-    shift: null,
-    code: 'ArrowRight',
-  },
-  {
     small: 'Win',
     shift: null,
     code: 'Win',
+  },
+  {
+    small: '&rarr;',
+    shift: null,
+    code: 'ArrowRight',
   },
 ];
