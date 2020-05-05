@@ -15,6 +15,7 @@ export default class Key {
     }
 
     this.letter = create("div", "letter", small);
-    this.divContainer = create("div", "keyboard__key", [this.sub, this.letter], null, ["code", this.code]);
+    this.divContainer = create("div", "keyboard__key", [this.sub, this.letter], null, ["code", this.code],
+      this.isFnKey ? ["fn", "true"] : ["fn", "false"]); //  разметка стиля функциональных клавишь
   }
 }

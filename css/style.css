@@ -48,7 +48,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: rgb(125, 201, 231);
+  color: rgb(157, 223, 250);
   background: rgb(3, 3, 3) radial-gradient(circle at 0 0, rgba(0, 0, 0, 0.75), rgba(84, 80, 92, 0.753));
   box-shadow: inset rgba(0,0,0,.75) -1px -1px 2px, inset rgba(255,255,255,.9) 1px 1px 2px, rgba(0,0,0,.8) 1px 1px 2px -1px;
   transition: all .2s ease;
@@ -59,12 +59,10 @@ main {
   user-select: none;
 }
 
-[data-fn="false"].active {
-  box-shadow: inset 0px 1px 2px 1px rgba(0,0,0,.9), inset 0 0 20px 2em rgba(255,255,255,.2);
-}
-
+[data-fn="false"].active,
 [data-fn="true"].active {
-  box-shadow: inset 0px 1px 2px 1px rgba(0,0,0,.9), inset 0 0 20px 2em rgba(255,255,255, 0);
+
+  box-shadow: inset 0px 1px 2px 1px rgba(15, 32, 185, 0.9), inset 0 0 20px 2em rgba(255,255,255, 0);
 }
 
 [data-fn="false"].active .letter,
@@ -74,13 +72,14 @@ main {
   -moz-transform: translateY(1px)  ;
   -ms-transform: translateY(1px)  ;
   -o-transform: translateY(1px)  ;
-  color: #244618;
+  color: #fffb01;
   font-weight: bold;
 }
 
 [data-fn="true"] {
-  background: rgb(78, 78, 78) radial-gradient(circle at 0 0, rgba(136, 134, 134, 0.65), rgba(167, 167, 167, 0.35));
-  box-shadow: inset rgba(0,0,0,.75) -1px -1px 2px, inset rgba(161, 160, 160, 0.9) 1px 1px 2px, rgba(0,0,0,.8) 1px 1px 2px -1px;
+  color:#e0e0e0;
+  background: rgb(3, 3, 3) radial-gradient(circle at 0 0, rgba(238, 98, 4, 0.808), rgba(247, 231, 11, 0.938));
+  font-weight: bold;
 }
 
 [data-fn="true"] > .letter {
