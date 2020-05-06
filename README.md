@@ -1,1 +1,9 @@
-# Virtual-Keyboard test version 1.0
+# Virtual-Keyboard JS Vanilla
+  [посмотреть клавиавтуру] (https://vansalivan.github.io/Virtual-Keyboard/)  
+### Функционал
+- Создание HTML разметки в JavaScript
+- Использование [eslint (eslint-config-airbnb-base)] (https://eslint.org/)
+- Функции клавишь
+    - TAB, CAPSLOCK, SHIFT, SPACE, ENTER, DELETE, BACKSPACE
+- Смена языка клавиатуры
+    - RU, ENG
