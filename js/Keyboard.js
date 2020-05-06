@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/extensions */
 
 import * as storage from './storage.js';
@@ -47,6 +48,26 @@ export default class Keyboard {
 
     document.addEventListener('keydown', this.handleEvent);
     document.addEventListener('keyup', this.handleEvent);
+    this.container.onmousedown = this.preHandleEvent;
+    this.container.onmouseup = this.preHandleEvent;
+  }
+
+  preHandleEvent = (e) => {
+    e.stopPropagation();
+    const keyDiv = e.target.closest(".keyboard__key");
+    const { dataset: { code } } = keyDiv; // const code = keyDiv.dataset.code;
+    keyDiv.addEventListener('mouseleave', this.resetButtonState);
+    this.handleEvent({ code, type: e.type });
+    // {
+    //   code: 'AltRight',
+    //   type: 'mousedown'
+    //  }
+  };
+
+  resetButtonState = ({ target: { dataset: { code } } }) => {
+    const keyObj = this.keyButtons.find((key) => key.code === code);
+    keyObj.divContainer.classList.remove("active");
+    keyObj.divContainer.removeEventListener('mouseleave', this.resetButtonState);
   }
 
   handleEvent = (e) => {
@@ -58,31 +79,89 @@ export default class Keyboard {
 
     if (type.match(/keydown|mousedown/)) {
       if (type.match(/key/)) e.preventDefault(); // Отключаем отслеживание системного* языка
-
       keyObj.divContainer.classList.add("active");
 
+      // CAPS Press
+      if (code.match(/Caps/) && !this.isCaps) {
+        this.isCaps = true;
+        this.switchUpperCase(true);
+      } else if (code.match(/Caps/) && this.isCaps) {
+        this.isCaps = false;
+        this.switchUpperCase(false);
+        keyObj.divContainer.classList.remove('active');
+      }
+
       // Смена языка FLAG KEY ON
-      if (code.match(/Shift/)) this.shiftKey = true;
       if (code.match(/Alt/)) this.altKey = true;
+      if (code.match(/Shift/)) this.shiftKey = true;
 
-      if (code.match(/Shift/) && this.altKey) this.switchLanguage();
       if (code.match(/Alt/) && this.shiftKey) this.switchLanguage();
+      if (code.match(/Shift/) && this.altKey) this.switchLanguage();
 
+      // Подлючение функции Верхнего регистра для отрисовки SHIFT и проверок для него
+      if (this.shiftKey) this.switchUpperCase(true);
 
-      // Верхний регистр CAPS & SHIFT
-      if (!this.isCaps) {
+      // Определяем, какой символ мы пишем в консоль (спец или основной)
+      if (!this.isCaps) { // если не зажат капс, смотрим не зажат ли шифт
         this.printToOutput(keyObj, this.shiftKey ? keyObj.shift : keyObj.small);
-      } else if (this.isCaps) {
-        this.printToOutput(keyObj, keyObj.sub.innerHTML ? keyObj.shift : keyObj.small);
-      } else {
-        this.printToOutput(keyObj, !keyObj.sub.innerHTML ? keyObj.shift : keyObj.small);
+      } else if (this.isCaps) { // если зажат капс
+        if (this.shiftKey) { // и при этом зажат шифт - то для кнопки со спецсимволом даем верхний регистр
+          this.printToOutput(keyObj, keyObj.sub.innerHTML ? keyObj.shift : keyObj.small);
+        } else { // и при этом НЕ зажат шифт - то для кнопки без спецсивмола даем верхний регистр
+          this.printToOutput(keyObj, !keyObj.sub.innerHTML ? keyObj.shift : keyObj.small);
+        }
       }
 
     } else if (type.match(/keyup|mouseup/)) {
-      keyObj.divContainer.classList.remove("active");
       // FLAG KEY OFF
-      if (code.match(/Shift/)) this.shiftKey = false;
       if (code.match(/Alt/)) this.altKey = false;
+      if (code.match(/Shift/)) {
+        this.shiftKey = false;
+        this.switchUpperCase(false);
+      }
+
+      if (!code.match(/Caps/)) keyObj.divContainer.classList.remove("active");
+    }
+  }
+
+  switchUpperCase(isTrue) {
+    if (isTrue) {
+      this.keyButtons.forEach((button) => {
+        if (button.sub) {
+          if (this.shiftKey) {
+            button.sub.classList.add("sub-active");
+            button.letter.classList.add("sub-inactive");
+          }
+        }
+
+        if (!button.isFnKey && this.isCaps && !this.shiftKey && !button.sub.innerHTML) {
+          button.letter.innerHTML = button.shift;
+        } else if (!button.isFnKey && this.isCaps && this.shiftKey) {
+          button.letter.innerHTML = button.small;
+        } else if (!button.isFnKey && !button.sub.innerHTML) {
+          button.letter.innerHTML = button.shift;
+        }
+      });
+
+    } else {
+      this.keyButtons.forEach((button) => {
+        if (button.sub.innerHTML && !button.isFnKey) {
+          button.sub.classList.remove("sub-active");
+          button.letter.classList.remove("sub-inactive");
+
+          if (!this.isCaps) {
+            button.letter.innerHTML = button.small;
+          } else if (!this.isCaps) { // ??????
+            button.letter.innerHTML = button.shift;
+          }
+        } else if (!button.isFnKey) {
+          if (this.isCaps) {
+            button.letter.innerHTML = button.shift;
+          } else {
+            button.letter.innerHTML = button.small;
+          }
+        }
+      });
     }
   }
 
