@@ -1,5 +1,4 @@
-# Virtual-Keyboard JS Vanilla
-  [посмотреть клавиавтуру] (https://vansalivan.github.io/Virtual-Keyboard/)  
+# [Virtual-Keyboard JS Vanilla](https://vansalivan.github.io/Virtual-Keyboard/) 
 ### Функционал
 - Создание HTML разметки в JavaScript
 - Использование [eslint (eslint-config-airbnb-base)] (https://eslint.org/)
