@@ -1,7 +1,6 @@
 # [Virtual-Keyboard JS Vanilla](https://vansalivan.github.io/Virtual-Keyboard/) 
 
-Цель: 
-- Создание страницы на JS, работа с DOM, Event, localstorage 
+Цель:
 - Освоение Eslint, NPM, JSON приципов модульности 
 
 ### Функционал
