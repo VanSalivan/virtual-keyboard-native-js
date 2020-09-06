@@ -1,4 +1,4 @@
-# [Virtual-Keyboard JS Vanilla](https://vansalivan.github.io/Virtual-Keyboard/) 
+# [Virtual-Keyboard JS Vanilla](https://vansalivan.github.io/VK/) 
 
 Цель:
 - Освоение Eslint, NPM, JSON приципов модульности 
