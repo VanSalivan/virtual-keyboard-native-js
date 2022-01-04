@@ -1,4 +1,4 @@
-# [Virtual-Keyboard JS Vanilla](https://vansalivan.github.io/JS__Virtual-Keyboard/) 
+# [virtual-keyboard-native-js](https://vansalivan.github.io/virtual-keyboard-native-js/) 
 Тренировочный проект для технического роста JavaScript
 - Освоение Eslint, NPM, JSON, приципов модульности
 
